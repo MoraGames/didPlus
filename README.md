@@ -1,6 +1,6 @@
 # Did+ On ERGO
 Did+ is a modern Elettronic register writed in GoLang.
-This project will be used as a track for the state exam.
+This project will be used as a track for the final exam.
 
 ## Used Technologies:
 
