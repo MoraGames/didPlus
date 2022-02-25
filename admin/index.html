@@ -90,11 +90,11 @@
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'lang');
         data.addColumn('number', 'calls');
-        data.addColumn('number', 'total time (s)');
+        data.addColumn('number', 'total time (ms)');
         data.addRows([
-          ['go',  calls["go"], totTime["go"]/1000000000],
-          ['php',   calls["php"],  totTime["php"]/1000000000],
-          ['python', calls["python"], totTime["python"]/1000000000],
+          ['go',  calls["go"], totTime["go"]/1000000],
+          ['php',   calls["php"],  totTime["php"]/1000000],
+          ['python', calls["python"], totTime["python"]/1000000],
         ]);
 
         var table = new google.visualization.Table(document.getElementById('table_div'));
