@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -45,9 +46,59 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("go %d ns\n", t)))
 }
 
+func homePage(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Method, r.RequestURI)
+
+	html, err := os.ReadFile("pages/index.html")
+	if err != nil {
+		w.Header().Add("content-type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf(`{"code": 500, "err":true, "msg":"error opening the file: %s"}`, err.Error())))
+		return
+	}
+
+	w.Header().Add("content-type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	w.Write(html)
+}
+
+func loginPage(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Method, r.RequestURI)
+
+	html, err := os.ReadFile("pages/login.html")
+	if err != nil {
+		w.Header().Add("content-type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf(`{"code": 500, "err":true, "msg":"error opening the file: %s"}`, err.Error())))
+		return
+	}
+
+	w.Header().Add("content-type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	w.Write(html)
+}
+
+func registerPage(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Method, r.RequestURI)
+
+	html, err := os.ReadFile("pages/register.html")
+	if err != nil {
+		w.Header().Add("content-type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf(`{"code": 500, "err":true, "msg":"error opening the file: %s"}`, err.Error())))
+		return
+	}
+
+	w.Header().Add("content-type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	w.Write(html)
+}
+
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/", handler)
+	r.HandleFunc("/", homePage)
+	r.HandleFunc("/login", loginPage)
+	r.HandleFunc("/reigster", registerPage)
 
 	log.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", r)
