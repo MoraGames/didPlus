@@ -3,11 +3,11 @@ var email_RegEx = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))
 var password_RegEx = /^(?=.*[a-z])(?=.*[A-Z])^(?=.*[0-9])(?=.*[.,:;!?#@&_\-])[a-zA-Z0-9.,:;!?#@&_\-]{8,}$/;
 
 // Creating the URL (login server endpoint) variable.
-var baseURL = "signIn_Verify";
+var baseURL = "https://localhost:8080";
 
-async function SignIn_SendData (usernameValue, passwordValue) {
-	if (username_RegEx.test(usernameValue) === true){
-    	let response = await request("POST", {operation: "verify_SignIn", data: {username: usernameValue, password: passwordValue}});
+async function SignIn_SendData (emailValue, passwordValue) {
+	if (email_RegEx.test(emailValue) === true){
+    	let response = await request("/api/signin","POST", {username: emailValue, password: passwordValue});
         console.log(response);
         if (response.status != 200) {
         	alert(response.error + "\n\n" + response.solution);
@@ -19,13 +19,13 @@ async function SignIn_SendData (usernameValue, passwordValue) {
     }
 }
 
-async function SignUp_SendData (usernameValue, passwordValue, passwordCheckValue) {
+async function SignUp_SendData (emailValue, passwordValue, passwordCheckValue) {
 	//console.log("SignUp | ? | {", usernameValue, ", ", passwordValue, ", ", passwordCheckValue, "};");
-    if (username_RegEx.test(usernameValue) === true){
+    if (email_RegEx.test(emailValue) === true){
 		if (password_RegEx.test(passwordValue) === true) {
         	if (passwordValue === passwordCheckValue) {
             	//console.log("SignUp | v | {", usernameValue, ", ", passwordValue, ", ", passwordCheckValue, "};");
-        		let response = await request("POST", {operation: "verify_SignUp", data:{username: usernameValue, password: passwordValue}});
+        		let response = await request("/api/signup","POST", {username: emailValue, password: passwordValue});
 				console.log(response);
                 if (response.status != 200) {
                     alert(response.error + "\n\n" + response.solution);
@@ -45,8 +45,8 @@ async function SignUp_SendData (usernameValue, passwordValue, passwordCheckValue
     }
 }
 
-async function request (requestMethod, requestBody) {
-    let response = await fetch(baseURL, {
+async function request (endpoint, requestMethod, requestBody) {
+    let response = await fetch(baseURL + endpoint, {
         method: requestMethod,
         header: {
             "Content-Type": "application/json",

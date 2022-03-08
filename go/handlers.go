@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -10,7 +12,7 @@ import (
 func homePage(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Method, r.RequestURI)
 
-	html, err := os.ReadFile("index.html")
+	html, err := os.ReadFile("pages\\index.html")
 	if err != nil {
 		w.Header().Add("content-type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -26,7 +28,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 func signinPage(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Method, r.RequestURI)
 
-	html, err := os.ReadFile("login.html")
+	html, err := os.ReadFile("pages\\login.html")
 	if err != nil {
 		w.Header().Add("content-type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -42,7 +44,7 @@ func signinPage(w http.ResponseWriter, r *http.Request) {
 func signupPage(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Method, r.RequestURI)
 
-	html, err := os.ReadFile("register.html")
+	html, err := os.ReadFile("pages\\register.html")
 	if err != nil {
 		w.Header().Add("content-type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -60,5 +62,20 @@ func signin(w http.ResponseWriter, r *http.Request) {
 }
 
 func signup(w http.ResponseWriter, r *http.Request) {
+	content, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		responseError(w, 500, err)
+		return
+	}
 
+	var user User
+	err = json.Unmarshal(content, &user)
+	if err != nil {
+		log.Println(err)
+		responseError(w, 400, err)
+		return
+	}
+
+	fmt.Println(user)
 }

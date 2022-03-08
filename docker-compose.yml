@@ -34,10 +34,10 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_DATABASE: benchmarks
-      MYSQL_USER: vano
-      MYSQL_PASSWORD: vano
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: didPlus
+      MYSQL_USER: MoraGames
+      MYSQL_PASSWORD: MoraGames
+      MYSQL_ROOT_PASSWORD: rootPassword
     ports:
       - "3306"
     volumes:

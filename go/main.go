@@ -2,16 +2,14 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
+/*func handler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Method, r.RequestURI)
 	//get time in nanoseconds
 	t := time.Now().UnixNano()
@@ -43,6 +41,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte(fmt.Sprintf("go %d ns\n", t)))
+}*/
+
+var db *sql.DB
+func init(){
+	var err error
+	db, err = sql.Open("mysql", "root:rootPassword@tcp(db:58138)/didPlus")
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func main() {
@@ -51,8 +58,8 @@ func main() {
 	r.HandleFunc("/index.html", homePage)
 	r.HandleFunc("/signin.html", signinPage)
 	r.HandleFunc("/signup.html", signupPage)
-	r.HandleFunc("/api/signin", signin)
-	r.HandleFunc("/api/signup", signup)
+	r.HandleFunc("/api/signin", signin).Methods("POST")
+	r.HandleFunc("/api/signup", signup).Methods("POST")
 
 	log.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", r)

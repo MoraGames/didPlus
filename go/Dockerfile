@@ -9,13 +9,13 @@ ENV secret ciao
 EXPOSE 8080
 WORKDIR /go/src/benchmarks
 
-COPY pages/*.html /go/src/benchmarks/
-COPY pages/*.js /go/src/benchmarks/
+COPY pages/*.html /go/src/benchmarks/pages
+COPY pages/*.js /go/src/benchmarks/pages
 
 COPY go.mod go.sum /go/src/benchmarks/
 RUN go mod download
 COPY *.go /go/src/benchmarks/
-RUN go build main.go
+RUN go build *.go
 
 CMD ./main
 

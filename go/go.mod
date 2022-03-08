@@ -1,4 +1,4 @@
-module go
+module github.com/MoraGames/didPlus/go
 
 go 1.17
 
