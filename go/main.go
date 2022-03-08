@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -57,4 +56,5 @@ func main() {
 
 	log.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", r)
+	//Little change 'a cazz...'
 }
