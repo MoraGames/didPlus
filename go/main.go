@@ -56,5 +56,4 @@ func main() {
 
 	log.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", r)
-	//Little change 'a cazz...'
 }

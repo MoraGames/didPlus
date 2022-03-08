@@ -20,5 +20,3 @@ RUN go build main.go
 CMD ./main
 
 EXPOSE 8080
-
-# Little change 'a cazz...'

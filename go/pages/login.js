@@ -64,5 +64,3 @@ async function request (requestMethod, requestBody) {
     	{username: "Cognome.Nome.22T000", password: "CognomeNome_22T000"}  // Teacher Login
     ];
 */
-
-//Little change 'a cazz...'

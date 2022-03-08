@@ -62,5 +62,3 @@ func signin(w http.ResponseWriter, r *http.Request) {
 func signup(w http.ResponseWriter, r *http.Request) {
 
 }
-
-//Little change 'a cazz...'
