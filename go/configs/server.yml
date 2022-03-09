@@ -1,0 +1,11 @@
+# Server configuration of Kaori
+server:
+  host: "localhost"
+  port: ":8080"
+  ssl:
+    certificate: ""
+    key: ""
+  limiter: 3
+  gui: "statics/"
+#  test: "kaoriSrc/tests/"
+#  template: "kaoriSrc/template/"

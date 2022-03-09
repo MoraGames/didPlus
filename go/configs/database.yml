@@ -1,0 +1,9 @@
+# Database configuration file
+
+database:
+  username: "root"
+  password: "ROOT_ACCESS_PASSWORD"
+  host: "localhost"
+  port: "3306"
+  db: "didPlus"
+  driver: "mysql"

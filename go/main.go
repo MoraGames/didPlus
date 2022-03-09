@@ -2,65 +2,61 @@ package main
 
 import (
 	"database/sql"
+	"github.com/MoraGames/didPlus/go/internal/config"
+	"github.com/MoraGames/didPlus/go/internal/database"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
 )
 
-/*func handler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Method, r.RequestURI)
-	//get time in nanoseconds
-	t := time.Now().UnixNano()
-	//connect to the db
-	db, err := sql.Open("mysql", "root:root@tcp(db:3306)/benchmarks")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Could not connect to the database"))
-	}
-	defer db.Close()
-	//generate a random number between 1 and 10
-	// rand := int(t) % 10
-	// if rand == 0 {
-	// 	useless := 0
-	// 	for i := 0; i < 100000000; i++ {
-	// 		useless += i
-	// 	}
-	// }
-
-	//calcolate the time passed
-	t = time.Now().UnixNano() - t
-
-	//save the result in the db
-	_, err = db.Exec("INSERT INTO benchmarks (backType, execTime) VALUES ('go', ?)", t)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Could not save the result: " + err.Error()))
-		return
-	}
-
-	w.Write([]byte(fmt.Sprintf("go %d ns\n", t)))
-}*/
-
 var db *sql.DB
+var cfg *config.Config
+const configPath string = "configs/"
+
 func init(){
 	var err error
-	db, err = sql.Open("mysql", "root:rootPassword@tcp(db:58138)/didPlus")
+
+	log.Println("Reading configuration...")
+	//READ CONFIG
+	cfg, err = config.NewConfig(configPath)
 	if err != nil {
 		log.Fatalln(err)
+	}
+
+	//VALIDATE CONFIG
+	err = cfg.CheckConfig()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("CONFIG:", cfg)
+
+	// Open database connection
+	dbTmp, err := database.NewSqlDb(&cfg.Database)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	db = dbTmp.Client
+
+	// Set Environment Variables
+	if v := os.Getenv("API_VERSION"); v == "" {
+		os.Setenv("API_VERSION", "v1")
 	}
 }
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", homePage)
-	r.HandleFunc("/index.html", homePage)
-	r.HandleFunc("/signin.html", signinPage)
-	r.HandleFunc("/signup.html", signupPage)
-	r.HandleFunc("/api/signin", signin).Methods("POST")
-	r.HandleFunc("/api/signup", signup).Methods("POST")
+	// Make router
+	r := routerInit()
 
-	log.Println("Listening on port 8080")
-	http.ListenAndServe(":8080", r)
+	// Make Server
+	server := &http.Server{
+		Addr:              "0.0.0.0" + cfg.Server.Port,
+		Handler:           r,
+	}
+
+	// Start server
+	log.Println("Listening on 0.0.0.0" + cfg.Server.Port)
+	log.Fatalln(server.ListenAndServe())
 }

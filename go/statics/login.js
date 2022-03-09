@@ -3,14 +3,15 @@ var email_RegEx = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))
 var password_RegEx = /^(?=.*[a-z])(?=.*[A-Z])^(?=.*[0-9])(?=.*[.,:;!?#@&_\-])[a-zA-Z0-9.,:;!?#@&_\-]{8,}$/;
 
 // Creating the URL (login server endpoint) variable.
-var baseURL = "https://localhost:8080";
+var baseURL = "http://localhost:8080";
+const ApiEndpoint = "/api/v1"
 
 async function SignIn_SendData (emailValue, passwordValue) {
 	if (email_RegEx.test(emailValue) === true){
-    	let response = await request("/api/signin","POST", {username: emailValue, password: passwordValue});
+    	let response = await request(ApiEndpoint + "/signin","POST", {email: emailValue, password: passwordValue});
         console.log(response);
         if (response.status != 200) {
-        	alert(response.error + "\n\n" + response.solution);
+            alert(response.error + "\n\n" + response.solution);
         } else {
         	location.replace(response.action);
         }
@@ -25,7 +26,7 @@ async function SignUp_SendData (emailValue, passwordValue, passwordCheckValue) {
 		if (password_RegEx.test(passwordValue) === true) {
         	if (passwordValue === passwordCheckValue) {
             	//console.log("SignUp | v | {", usernameValue, ", ", passwordValue, ", ", passwordCheckValue, "};");
-        		let response = await request("/api/signup","POST", {username: emailValue, password: passwordValue});
+        		let response = await request(ApiEndpoint + "/signup","POST", {email: emailValue, password: passwordValue});
 				console.log(response);
                 if (response.status != 200) {
                     alert(response.error + "\n\n" + response.solution);
@@ -54,6 +55,7 @@ async function request (endpoint, requestMethod, requestBody) {
         },
         body: JSON.stringify(requestBody)
     });
+
     let returnValueText = await response.json();
     return returnValueText;
 }
