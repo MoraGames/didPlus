@@ -10,7 +10,6 @@ COPY *.html /go/src/admin/
 COPY *.go /go/src/admin/
 RUN go build *.go
 
-RUN ls -al
 CMD ./execs
 
 EXPOSE 8080
