@@ -8,31 +8,23 @@ FROM golang:1.17.6-alpine3.14
 EXPOSE 8080
 WORKDIR $GOPATH/src/github.com/MoraGames/didPlus/go
 
-COPY .  $GOPATH/src/github.com/MoraGames/didPlus/go/
-
-#RUN ls -al
-#RUN ls -al statics
-#RUN ls -al configs
-#RUN ls -al internal
-#RUN ls -al internal/config
-#RUN ls -al internal/controllers
-#RUN ls -al internal/database
-#RUN ls -al internal/models
-#RUN ls -al internal/models/user
-#RUN ls -al internal/utils
-#RUN ls -al internal/validators
-
+#COPY .  $GOPATH/src/github.com/MoraGames/didPlus/go/
+COPY statics/*.html $GOPATH/src/github.com/MoraGames/didPlus/go/statics/
+COPY statics/*.js $GOPATH/src/github.com/MoraGames/didPlus/go/statics/
 
 #COPY statics/*.html /go/src/didPlus/statics/
 #COPY statics/*.js /go/src/didPlus/statics/
 #COPY statics/ /go/src/didPlus/statics/
-#COPY internal/ /go/src/didPlus/internal/
+COPY internal $GOPATH/src/github.com/MoraGames/didPlus/go/internal/
 
-#COPY *.go /go/src/didPlus/
+RUN ls $GOPATH/src/github.com/MoraGames/didPlus/go/
+
+COPY go.mod go.sum $GOPATH/src/github.com/MoraGames/didPlus/go/
+RUN go mod download
 #COPY go.mod go.sum /go/src/didPlus/
 #RUN ls
-RUN go mod download
 RUN pwd
+COPY *.go  $GOPATH/src/github.com/MoraGames/didPlus/go/
 RUN go build *.go
 
 CMD ./main
