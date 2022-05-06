@@ -1,13 +1,21 @@
 package main
 
-// Endpoint base
-const endpointRoot = "/"
-const endpointSignup = "/signup"
-const endpointSignIn = "signin"
+type Endpoint string
 
-// Endpoint Api
-const api = "/api/"
+const (
+	//Base Endpoints
+	root  Endpoint = "/"
+	login Endpoint = "/login"
 
-// Endpoint User Api
-const signup = "/signup"
-const signin = "/signin"
+	//User Endpoints
+	home       Endpoint = "/user/home"
+	votes      Endpoint = "/user/votes"
+	ballots    Endpoint = "/user/ballots"
+	attendance Endpoint = "/user/attendace"
+	notes      Endpoint = "/user/notes"
+	timetable  Endpoint = "/user/timetable"
+	calendar   Endpoint = "/user/calendar"
+
+	//API Endpoints
+	api Endpoint = "/api"
+)
